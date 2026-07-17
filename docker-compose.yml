@@ -1,0 +1,64 @@
+version: '3.8'
+
+services:
+  # ── Database ──────────────────────────────────────────────────────────────────
+  postgres:
+    image: postgres:16-alpine
+    container_name: teamflow_db
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: teamflow
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: teamflow
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U teamflow']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+  # ── Backend ───────────────────────────────────────────────────────────────────
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: teamflow_backend
+    restart: unless-stopped
+    env_file:
+      - ./backend/.env
+    environment:
+      DATABASE_URL: postgresql://teamflow:${POSTGRES_PASSWORD}@postgres:5432/teamflow
+    ports:
+      - '5000:5000'
+    volumes:
+      - ./backend/src:/app/src
+      - ./backend/prisma:/app/prisma
+      - ./backend/uploads:/app/uploads
+    depends_on:
+      postgres:
+        condition: service_healthy
+
+  # ── Frontend ──────────────────────────────────────────────────────────────────
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: teamflow_frontend
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    volumes:
+      - ./frontend/src:/app/src
+      - ./frontend/public:/app/public
+    depends_on:
+      - backend
+    environment:
+      # Change this to your machine's LAN IP (e.g. http://192.168.1.x:5000/api/v1) if you
+      # want to open the app from a phone or another device on the same network.
+      NEXT_PUBLIC_API_URL: http://localhost:5000/api/v1
+
+volumes:
+  postgres_data:

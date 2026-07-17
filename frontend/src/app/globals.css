@@ -1,0 +1,494 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  /*
+   * Semantic color tokens (shadcn/ui-style pattern): Tailwind colors reference these
+   * as hsl(var(--x) / <alpha-value>) — see tailwind.config.js. Values are HSL triplets
+   * WITHOUT the hsl()/commas so Tailwind can inject an alpha channel.
+   *
+   * Scoping: [data-accent="..."] on <html> picks the preset; crossed with the existing
+   * .dark class for the dark variant of that preset. :root/.dark below are the
+   * pre-hydration fallback and match the "olive" (signature/default) preset so there's
+   * no flash before theme.store.ts sets data-accent on mount (see layout.tsx inline script).
+   *
+   * A 7th "custom" accent (arbitrary hue, 0-360) is handled entirely differently: it does
+   * NOT use [data-accent="custom"] CSS rules — instead frontend/src/lib/theme-tokens.ts
+   * derives the same token set at runtime and applies it as inline styles on
+   * document.documentElement, which naturally wins over these class/attribute rules.
+   */
+  :root {
+    --background: 75 25% 97%;
+    --foreground: 75 18% 14%;
+    --card: 75 15% 99%;
+    --card-foreground: 75 18% 14%;
+    --primary: 75 28% 37%;
+    --primary-foreground: 75 15% 98%;
+    --secondary: 75 18% 93%;
+    --secondary-foreground: 75 18% 20%;
+    --muted: 75 18% 94%;
+    --muted-foreground: 75 8% 42%;
+    --accent: 75 28% 37%;
+    --accent-foreground: 75 15% 98%;
+    --border: 75 18% 88%;
+    --ring: 75 28% 37%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --gradient-signature: radial-gradient(at 18% 22%, #5C6B39E6 0%, transparent 58%), radial-gradient(at 82% 18%, #93A35ECC 0%, transparent 62%), radial-gradient(at 55% 92%, #D9B45CD9 0%, transparent 65%), linear-gradient(135deg, #5C6B39 0%, #D9B45C 100%);
+  }
+
+  .dark {
+    --background: 75 20% 7%;
+    --foreground: 75 12% 92%;
+    --card: 75 16% 11%;
+    --card-foreground: 75 12% 92%;
+    --primary: 71 30% 58%;
+    --primary-foreground: 71 20% 10%;
+    --secondary: 75 15% 17%;
+    --secondary-foreground: 75 12% 90%;
+    --muted: 75 15% 15%;
+    --muted-foreground: 75 8% 62%;
+    --accent: 71 30% 58%;
+    --accent-foreground: 71 20% 10%;
+    --border: 75 15% 21%;
+    --ring: 71 30% 58%;
+    --destructive: 0 70% 63%;
+    --destructive-foreground: 0 0% 100%;
+    --gradient-signature: radial-gradient(at 18% 22%, #5C6B39E6 0%, transparent 58%), radial-gradient(at 82% 18%, #93A35ECC 0%, transparent 62%), radial-gradient(at 55% 92%, #D9B45CD9 0%, transparent 65%), linear-gradient(135deg, #5C6B39 0%, #D9B45C 100%);
+  }
+
+  /* --- Preset tokens: 6 hand-designed accents, each with a light + dark variant --- */
+
+  [data-accent="olive"] {
+    --background: 75 25% 97%;
+    --foreground: 75 18% 14%;
+    --card: 75 15% 99%;
+    --card-foreground: 75 18% 14%;
+    --primary: 75 28% 37%;
+    --primary-foreground: 75 15% 98%;
+    --secondary: 75 18% 93%;
+    --secondary-foreground: 75 18% 20%;
+    --muted: 75 18% 94%;
+    --muted-foreground: 75 8% 42%;
+    --accent: 75 28% 37%;
+    --accent-foreground: 75 15% 98%;
+    --border: 75 18% 88%;
+    --ring: 75 28% 37%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --gradient-signature: radial-gradient(at 18% 22%, #5C6B39E6 0%, transparent 58%), radial-gradient(at 82% 18%, #93A35ECC 0%, transparent 62%), radial-gradient(at 55% 92%, #D9B45CD9 0%, transparent 65%), linear-gradient(135deg, #5C6B39 0%, #D9B45C 100%);
+  }
+
+  .dark[data-accent="olive"] {
+    --background: 75 20% 7%;
+    --foreground: 75 12% 92%;
+    --card: 75 16% 11%;
+    --card-foreground: 75 12% 92%;
+    --primary: 71 30% 58%;
+    --primary-foreground: 71 20% 10%;
+    --secondary: 75 15% 17%;
+    --secondary-foreground: 75 12% 90%;
+    --muted: 75 15% 15%;
+    --muted-foreground: 75 8% 62%;
+    --accent: 71 30% 58%;
+    --accent-foreground: 71 20% 10%;
+    --border: 75 15% 21%;
+    --ring: 71 30% 58%;
+    --destructive: 0 70% 63%;
+    --destructive-foreground: 0 0% 100%;
+    --gradient-signature: radial-gradient(at 18% 22%, #5C6B39E6 0%, transparent 58%), radial-gradient(at 82% 18%, #93A35ECC 0%, transparent 62%), radial-gradient(at 55% 92%, #D9B45CD9 0%, transparent 65%), linear-gradient(135deg, #5C6B39 0%, #D9B45C 100%);
+  }
+
+  [data-accent="moss"] {
+    --background: 152 25% 97%;
+    --foreground: 152 18% 14%;
+    --card: 152 15% 99%;
+    --card-foreground: 152 18% 14%;
+    --primary: 152 40% 27%;
+    --primary-foreground: 152 15% 98%;
+    --secondary: 152 18% 93%;
+    --secondary-foreground: 152 18% 20%;
+    --muted: 152 18% 94%;
+    --muted-foreground: 152 8% 42%;
+    --accent: 152 40% 27%;
+    --accent-foreground: 152 15% 98%;
+    --border: 152 18% 88%;
+    --ring: 152 40% 27%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --gradient-signature: radial-gradient(at 18% 22%, #1F4A36E6 0%, transparent 58%), radial-gradient(at 82% 18%, #4F8A68CC 0%, transparent 62%), radial-gradient(at 55% 92%, #C9A94AD9 0%, transparent 65%), linear-gradient(135deg, #1F4A36 0%, #C9A94A 100%);
+  }
+
+  .dark[data-accent="moss"] {
+    --background: 152 20% 7%;
+    --foreground: 152 12% 92%;
+    --card: 152 16% 11%;
+    --card-foreground: 152 12% 92%;
+    --primary: 150 32% 54%;
+    --primary-foreground: 150 20% 10%;
+    --secondary: 152 15% 17%;
+    --secondary-foreground: 152 12% 90%;
+    --muted: 152 15% 15%;
+    --muted-foreground: 152 8% 62%;
+    --accent: 150 32% 54%;
+    --accent-foreground: 150 20% 10%;
+    --border: 152 15% 21%;
+    --ring: 150 32% 54%;
+    --destructive: 0 70% 63%;
+    --destructive-foreground: 0 0% 100%;
+    --gradient-signature: radial-gradient(at 18% 22%, #1F4A36E6 0%, transparent 58%), radial-gradient(at 82% 18%, #4F8A68CC 0%, transparent 62%), radial-gradient(at 55% 92%, #C9A94AD9 0%, transparent 65%), linear-gradient(135deg, #1F4A36 0%, #C9A94A 100%);
+  }
+
+  [data-accent="sage"] {
+    --background: 111 25% 97%;
+    --foreground: 111 18% 14%;
+    --card: 111 15% 99%;
+    --card-foreground: 111 18% 14%;
+    --primary: 111 12% 42%;
+    --primary-foreground: 111 15% 98%;
+    --secondary: 111 18% 93%;
+    --secondary-foreground: 111 18% 20%;
+    --muted: 111 18% 94%;
+    --muted-foreground: 111 8% 42%;
+    --accent: 111 12% 42%;
+    --accent-foreground: 111 15% 98%;
+    --border: 111 18% 88%;
+    --ring: 111 12% 42%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --gradient-signature: radial-gradient(at 18% 22%, #6B7A68E6 0%, transparent 58%), radial-gradient(at 82% 18%, #A9B7A5CC 0%, transparent 62%), radial-gradient(at 55% 92%, #D8CBA8D9 0%, transparent 65%), linear-gradient(135deg, #6B7A68 0%, #D8CBA8 100%);
+  }
+
+  .dark[data-accent="sage"] {
+    --background: 111 20% 7%;
+    --foreground: 111 12% 92%;
+    --card: 111 16% 11%;
+    --card-foreground: 111 12% 92%;
+    --primary: 110 14% 68%;
+    --primary-foreground: 110 20% 10%;
+    --secondary: 111 15% 17%;
+    --secondary-foreground: 111 12% 90%;
+    --muted: 111 15% 15%;
+    --muted-foreground: 111 8% 62%;
+    --accent: 110 14% 68%;
+    --accent-foreground: 110 20% 10%;
+    --border: 111 15% 21%;
+    --ring: 110 14% 68%;
+    --destructive: 0 70% 63%;
+    --destructive-foreground: 0 0% 100%;
+    --gradient-signature: radial-gradient(at 18% 22%, #6B7A68E6 0%, transparent 58%), radial-gradient(at 82% 18%, #A9B7A5CC 0%, transparent 62%), radial-gradient(at 55% 92%, #D8CBA8D9 0%, transparent 65%), linear-gradient(135deg, #6B7A68 0%, #D8CBA8 100%);
+  }
+
+  [data-accent="amber"] {
+    --background: 40 25% 97%;
+    --foreground: 40 18% 14%;
+    --card: 40 15% 99%;
+    --card-foreground: 40 18% 14%;
+    --primary: 40 62% 44%;
+    --primary-foreground: 40 20% 10%;
+    --secondary: 40 18% 93%;
+    --secondary-foreground: 40 18% 20%;
+    --muted: 40 18% 94%;
+    --muted-foreground: 40 8% 42%;
+    --accent: 40 62% 44%;
+    --accent-foreground: 40 20% 10%;
+    --border: 40 18% 88%;
+    --ring: 40 62% 44%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --gradient-signature: radial-gradient(at 18% 22%, #8A5F1DE6 0%, transparent 58%), radial-gradient(at 82% 18%, #D9A63ECC 0%, transparent 62%), radial-gradient(at 55% 92%, #F0CE84D9 0%, transparent 65%), linear-gradient(135deg, #8A5F1D 0%, #F0CE84 100%);
+  }
+
+  .dark[data-accent="amber"] {
+    --background: 40 20% 7%;
+    --foreground: 40 12% 92%;
+    --card: 40 16% 11%;
+    --card-foreground: 40 12% 92%;
+    --primary: 42 55% 64%;
+    --primary-foreground: 42 20% 10%;
+    --secondary: 40 15% 17%;
+    --secondary-foreground: 40 12% 90%;
+    --muted: 40 15% 15%;
+    --muted-foreground: 40 8% 62%;
+    --accent: 42 55% 64%;
+    --accent-foreground: 42 20% 10%;
+    --border: 40 15% 21%;
+    --ring: 42 55% 64%;
+    --destructive: 0 70% 63%;
+    --destructive-foreground: 0 0% 100%;
+    --gradient-signature: radial-gradient(at 18% 22%, #8A5F1DE6 0%, transparent 58%), radial-gradient(at 82% 18%, #D9A63ECC 0%, transparent 62%), radial-gradient(at 55% 92%, #F0CE84D9 0%, transparent 65%), linear-gradient(135deg, #8A5F1D 0%, #F0CE84 100%);
+  }
+
+  [data-accent="ocean"] {
+    --background: 185 25% 97%;
+    --foreground: 185 18% 14%;
+    --card: 185 15% 99%;
+    --card-foreground: 185 18% 14%;
+    --primary: 185 38% 33%;
+    --primary-foreground: 185 15% 98%;
+    --secondary: 185 18% 93%;
+    --secondary-foreground: 185 18% 20%;
+    --muted: 185 18% 94%;
+    --muted-foreground: 185 8% 42%;
+    --accent: 185 38% 33%;
+    --accent-foreground: 185 15% 98%;
+    --border: 185 18% 88%;
+    --ring: 185 38% 33%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --gradient-signature: radial-gradient(at 18% 22%, #1F4A4DE6 0%, transparent 58%), radial-gradient(at 82% 18%, #5FA0A6CC 0%, transparent 62%), radial-gradient(at 55% 92%, #D9B45CD9 0%, transparent 65%), linear-gradient(135deg, #1F4A4D 0%, #D9B45C 100%);
+  }
+
+  .dark[data-accent="ocean"] {
+    --background: 185 20% 7%;
+    --foreground: 185 12% 92%;
+    --card: 185 16% 11%;
+    --card-foreground: 185 12% 92%;
+    --primary: 188 32% 60%;
+    --primary-foreground: 188 20% 10%;
+    --secondary: 185 15% 17%;
+    --secondary-foreground: 185 12% 90%;
+    --muted: 185 15% 15%;
+    --muted-foreground: 185 8% 62%;
+    --accent: 188 32% 60%;
+    --accent-foreground: 188 20% 10%;
+    --border: 185 15% 21%;
+    --ring: 188 32% 60%;
+    --destructive: 0 70% 63%;
+    --destructive-foreground: 0 0% 100%;
+    --gradient-signature: radial-gradient(at 18% 22%, #1F4A4DE6 0%, transparent 58%), radial-gradient(at 82% 18%, #5FA0A6CC 0%, transparent 62%), radial-gradient(at 55% 92%, #D9B45CD9 0%, transparent 65%), linear-gradient(135deg, #1F4A4D 0%, #D9B45C 100%);
+  }
+
+  [data-accent="clay"] {
+    --background: 18 25% 97%;
+    --foreground: 18 18% 14%;
+    --card: 18 15% 99%;
+    --card-foreground: 18 18% 14%;
+    --primary: 18 52% 42%;
+    --primary-foreground: 18 15% 98%;
+    --secondary: 18 18% 93%;
+    --secondary-foreground: 18 18% 20%;
+    --muted: 18 18% 94%;
+    --muted-foreground: 18 8% 42%;
+    --accent: 18 52% 42%;
+    --accent-foreground: 18 15% 98%;
+    --border: 18 18% 88%;
+    --ring: 18 52% 42%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --gradient-signature: radial-gradient(at 18% 22%, #7A3B22E6 0%, transparent 58%), radial-gradient(at 82% 18%, #C97D52CC 0%, transparent 62%), radial-gradient(at 55% 92%, #E8B96BD9 0%, transparent 65%), linear-gradient(135deg, #7A3B22 0%, #E8B96B 100%);
+  }
+
+  .dark[data-accent="clay"] {
+    --background: 18 20% 7%;
+    --foreground: 18 12% 92%;
+    --card: 18 16% 11%;
+    --card-foreground: 18 12% 92%;
+    --primary: 20 48% 62%;
+    --primary-foreground: 20 20% 10%;
+    --secondary: 18 15% 17%;
+    --secondary-foreground: 18 12% 90%;
+    --muted: 18 15% 15%;
+    --muted-foreground: 18 8% 62%;
+    --accent: 20 48% 62%;
+    --accent-foreground: 20 20% 10%;
+    --border: 18 15% 21%;
+    --ring: 20 48% 62%;
+    --destructive: 0 70% 63%;
+    --destructive-foreground: 0 0% 100%;
+    --gradient-signature: radial-gradient(at 18% 22%, #7A3B22E6 0%, transparent 58%), radial-gradient(at 82% 18%, #C97D52CC 0%, transparent 62%), radial-gradient(at 55% 92%, #E8B96BD9 0%, transparent 65%), linear-gradient(135deg, #7A3B22 0%, #E8B96B 100%);
+  }
+
+  /* --- 4 more hand-designed accents (same recipe): slate, rose, sand, denim --- */
+
+  [data-accent="slate"] {
+    --background: 213 25% 97%;
+    --foreground: 213 18% 14%;
+    --card: 213 15% 99%;
+    --card-foreground: 213 18% 14%;
+    --primary: 213 24% 38%;
+    --primary-foreground: 213 15% 98%;
+    --secondary: 213 18% 93%;
+    --secondary-foreground: 213 18% 20%;
+    --muted: 213 18% 94%;
+    --muted-foreground: 213 8% 42%;
+    --accent: 213 24% 38%;
+    --accent-foreground: 213 15% 98%;
+    --border: 213 18% 88%;
+    --ring: 213 24% 38%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --gradient-signature: radial-gradient(at 18% 22%, #22364FE6 0%, transparent 58%), radial-gradient(at 82% 18%, #577BA8CC 0%, transparent 62%), radial-gradient(at 55% 92%, #D3B369D9 0%, transparent 65%), linear-gradient(135deg, #22364F 0%, #D3B369 100%);
+  }
+
+  .dark[data-accent="slate"] {
+    --background: 211 20% 7%;
+    --foreground: 211 12% 92%;
+    --card: 211 16% 11%;
+    --card-foreground: 211 12% 92%;
+    --primary: 211 26% 62%;
+    --primary-foreground: 211 20% 10%;
+    --secondary: 211 15% 17%;
+    --secondary-foreground: 211 12% 90%;
+    --muted: 211 15% 15%;
+    --muted-foreground: 211 8% 62%;
+    --accent: 211 26% 62%;
+    --accent-foreground: 211 20% 10%;
+    --border: 211 15% 21%;
+    --ring: 211 26% 62%;
+    --destructive: 0 70% 63%;
+    --destructive-foreground: 0 0% 100%;
+    --gradient-signature: radial-gradient(at 18% 22%, #22364FE6 0%, transparent 58%), radial-gradient(at 82% 18%, #577BA8CC 0%, transparent 62%), radial-gradient(at 55% 92%, #D3B369D9 0%, transparent 65%), linear-gradient(135deg, #22364F 0%, #D3B369 100%);
+  }
+
+  [data-accent="rose"] {
+    --background: 350 25% 97%;
+    --foreground: 350 18% 14%;
+    --card: 350 15% 99%;
+    --card-foreground: 350 18% 14%;
+    --primary: 350 34% 42%;
+    --primary-foreground: 350 15% 98%;
+    --secondary: 350 18% 93%;
+    --secondary-foreground: 350 18% 20%;
+    --muted: 350 18% 94%;
+    --muted-foreground: 350 8% 42%;
+    --accent: 350 34% 42%;
+    --accent-foreground: 350 15% 98%;
+    --border: 350 18% 88%;
+    --ring: 350 34% 42%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --gradient-signature: radial-gradient(at 18% 22%, #4F2229E6 0%, transparent 58%), radial-gradient(at 82% 18%, #A85764CC 0%, transparent 62%), radial-gradient(at 55% 92%, #D3B369D9 0%, transparent 65%), linear-gradient(135deg, #4F2229 0%, #D3B369 100%);
+  }
+
+  .dark[data-accent="rose"] {
+    --background: 352 20% 7%;
+    --foreground: 352 12% 92%;
+    --card: 352 16% 11%;
+    --card-foreground: 352 12% 92%;
+    --primary: 352 30% 64%;
+    --primary-foreground: 352 20% 10%;
+    --secondary: 352 15% 17%;
+    --secondary-foreground: 352 12% 90%;
+    --muted: 352 15% 15%;
+    --muted-foreground: 352 8% 62%;
+    --accent: 352 30% 64%;
+    --accent-foreground: 352 20% 10%;
+    --border: 352 15% 21%;
+    --ring: 352 30% 64%;
+    --destructive: 0 70% 63%;
+    --destructive-foreground: 0 0% 100%;
+    --gradient-signature: radial-gradient(at 18% 22%, #4F2229E6 0%, transparent 58%), radial-gradient(at 82% 18%, #A85764CC 0%, transparent 62%), radial-gradient(at 55% 92%, #D3B369D9 0%, transparent 65%), linear-gradient(135deg, #4F2229 0%, #D3B369 100%);
+  }
+
+  [data-accent="sand"] {
+    --background: 32 25% 97%;
+    --foreground: 32 18% 14%;
+    --card: 32 15% 99%;
+    --card-foreground: 32 18% 14%;
+    --primary: 32 18% 36%;
+    --primary-foreground: 32 15% 98%;
+    --secondary: 32 18% 93%;
+    --secondary-foreground: 32 18% 20%;
+    --muted: 32 18% 94%;
+    --muted-foreground: 32 8% 42%;
+    --accent: 32 18% 36%;
+    --accent-foreground: 32 15% 98%;
+    --border: 32 18% 88%;
+    --ring: 32 18% 36%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --gradient-signature: radial-gradient(at 18% 22%, #4F3A22E6 0%, transparent 58%), radial-gradient(at 82% 18%, #A88257CC 0%, transparent 62%), radial-gradient(at 55% 92%, #DFBA90D9 0%, transparent 65%), linear-gradient(135deg, #4F3A22 0%, #DFBA90 100%);
+  }
+
+  .dark[data-accent="sand"] {
+    --background: 34 20% 7%;
+    --foreground: 34 12% 92%;
+    --card: 34 16% 11%;
+    --card-foreground: 34 12% 92%;
+    --primary: 34 20% 64%;
+    --primary-foreground: 34 20% 10%;
+    --secondary: 34 15% 17%;
+    --secondary-foreground: 34 12% 90%;
+    --muted: 34 15% 15%;
+    --muted-foreground: 34 8% 62%;
+    --accent: 34 20% 64%;
+    --accent-foreground: 34 20% 10%;
+    --border: 34 15% 21%;
+    --ring: 34 20% 64%;
+    --destructive: 0 70% 63%;
+    --destructive-foreground: 0 0% 100%;
+    --gradient-signature: radial-gradient(at 18% 22%, #4F3A22E6 0%, transparent 58%), radial-gradient(at 82% 18%, #A88257CC 0%, transparent 62%), radial-gradient(at 55% 92%, #DFBA90D9 0%, transparent 65%), linear-gradient(135deg, #4F3A22 0%, #DFBA90 100%);
+  }
+
+  [data-accent="denim"] {
+    --background: 222 25% 97%;
+    --foreground: 222 18% 14%;
+    --card: 222 15% 99%;
+    --card-foreground: 222 18% 14%;
+    --primary: 222 34% 36%;
+    --primary-foreground: 222 15% 98%;
+    --secondary: 222 18% 93%;
+    --secondary-foreground: 222 18% 20%;
+    --muted: 222 18% 94%;
+    --muted-foreground: 222 8% 42%;
+    --accent: 222 34% 36%;
+    --accent-foreground: 222 15% 98%;
+    --border: 222 18% 88%;
+    --ring: 222 34% 36%;
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --gradient-signature: radial-gradient(at 18% 22%, #1F2B47E6 0%, transparent 58%), radial-gradient(at 82% 18%, #546EABCC 0%, transparent 62%), radial-gradient(at 55% 92%, #7DA1D4D9 0%, transparent 65%), linear-gradient(135deg, #1F2B47 0%, #7DA1D4 100%);
+  }
+
+  .dark[data-accent="denim"] {
+    --background: 224 20% 7%;
+    --foreground: 224 12% 92%;
+    --card: 224 16% 11%;
+    --card-foreground: 224 12% 92%;
+    --primary: 224 30% 63%;
+    --primary-foreground: 224 20% 10%;
+    --secondary: 224 15% 17%;
+    --secondary-foreground: 224 12% 90%;
+    --muted: 224 15% 15%;
+    --muted-foreground: 224 8% 62%;
+    --accent: 224 30% 63%;
+    --accent-foreground: 224 20% 10%;
+    --border: 224 15% 21%;
+    --ring: 224 30% 63%;
+    --destructive: 0 70% 63%;
+    --destructive-foreground: 0 0% 100%;
+    --gradient-signature: radial-gradient(at 18% 22%, #1F2B47E6 0%, transparent 58%), radial-gradient(at 82% 18%, #546EABCC 0%, transparent 62%), radial-gradient(at 55% 92%, #7DA1D4D9 0%, transparent 65%), linear-gradient(135deg, #1F2B47 0%, #7DA1D4 100%);
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    /* Prevent iOS overscroll bounce on the root — individual scroll areas opt in */
+    overscroll-behavior: none;
+  }
+
+  /* Momentum scroll only on explicit kanban swipe container — NOT on overflow-y-auto
+     because -webkit-overflow-scrolling: touch creates a new stacking context on iOS
+     which breaks position:fixed children (sidebar, modals) */
+  .kanban-scroll {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  h1 { @apply text-3xl font-bold; }
+  h2 { @apply text-2xl font-semibold; }
+  h3 { @apply text-xl font-semibold; }
+}
+
+@layer components {
+  .card {
+    @apply bg-card text-card-foreground rounded-2xl border border-border shadow-sm;
+  }
+
+  .page-container {
+    @apply max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-5 sm:py-8;
+  }
+}
+
